@@ -1,0 +1,16 @@
+{
+    "name": "protosofia/rempathy",
+    "description": "Simple repository pattern implementation",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mauricio Queiroz",
+            "email": "ephiot@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "laravel/framework": "^5.4"
+    }
+}
