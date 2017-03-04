@@ -12,5 +12,10 @@
     "minimum-stability": "dev",
     "require": {
         "laravel/framework": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Protosofia\\Rempathy\\": "src/"
+        }
     }
 }
