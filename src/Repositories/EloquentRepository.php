@@ -105,6 +105,8 @@ class EloquentRepository implements RepositoryInterface
 
         if (empty($params)) return $query;
 
+        if (!is_array(reset($params))) $params = [$params];
+
         $clauses = [
             'where' => 'where',
             'or' => 'orWhere',
