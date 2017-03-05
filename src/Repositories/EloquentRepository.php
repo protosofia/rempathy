@@ -13,6 +13,11 @@ class EloquentRepository implements RepositoryInterface
     protected $model;
 
     /**
+     * @var Array $fields Fields list
+     */
+    protected $fields;
+
+    /**
      * Create a new instance of NetworkCrudService
      *
      * @param ModelInterface $model Model instance
@@ -22,6 +27,25 @@ class EloquentRepository implements RepositoryInterface
     public function __construct(ModelInterface $model)
     {
         $this->model = $model;
+        $this->fields = $model->getFillable();
+    }
+
+    /**
+     * Get valid fields array
+     *
+     * @param array $params Record data
+     *
+     * @return array Valid params array
+     */
+    public function getValidParams($params)
+    {
+        $fields = $this->fields;
+
+        $callback = function ($key) use ($fields) {
+            return (array_search($key, $fields) !== false);
+        };
+
+        return array_filter($params, $callback, ARRAY_FILTER_USE_KEY);
     }
 
     /**
@@ -33,6 +57,8 @@ class EloquentRepository implements RepositoryInterface
      */
     public function create($params)
     {
+        $params = $this->getValidParams($params);
+
         return $this->model->create($params);
     }
 
@@ -59,6 +85,8 @@ class EloquentRepository implements RepositoryInterface
      */
     public function update($params, $data)
     {
+        $data = $this->getValidParams($data);
+
         $query = $this->parseParams($params);
 
         return $query->update($data);
