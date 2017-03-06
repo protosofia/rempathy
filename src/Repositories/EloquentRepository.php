@@ -13,11 +13,6 @@ class EloquentRepository implements RepositoryInterface
     protected $model;
 
     /**
-     * @var Array $fields Fields list
-     */
-    protected $fields;
-
-    /**
      * Create a new instance of NetworkCrudService
      *
      * @param ModelInterface $model Model instance
@@ -27,7 +22,6 @@ class EloquentRepository implements RepositoryInterface
     public function __construct(ModelInterface $model)
     {
         $this->model = $model;
-        $this->fields = $model->getFillable();
     }
 
     /**
@@ -39,7 +33,7 @@ class EloquentRepository implements RepositoryInterface
      */
     public function getValidParams($params)
     {
-        $fields = $this->fields;
+        $fields = $this->model->getFillable();
 
         $callback = function ($key) use ($fields) {
             return (array_search($key, $fields) !== false);
