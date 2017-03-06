@@ -13,15 +13,54 @@ class EloquentRepository implements RepositoryInterface
     protected $model;
 
     /**
+     * @var array $createFields Fillable fields on create
+     */
+    protected $createFields;
+
+    /**
+     * @var array $updateFields Fillable fields on update
+     */
+    protected $updateFields;
+
+    /**
      * Create a new instance of NetworkCrudService
      *
      * @param ModelInterface $model Model instance
      *
      * @return void
      */
-    public function __construct(ModelInterface $model)
-    {
+    public function __construct(
+        ModelInterface $model,
+        $createFields = false,
+        $updateFields = false
+    ) {
         $this->model = $model;
+        $this->createFields = $createFields;
+        $this->updateFields = $updateFields;
+    }
+
+    /**
+     * Set fillable fields on create
+     *
+     * @param array $fields Fillable fields on create
+     *
+     * @return void
+     */
+    public function setCreateFields(array $fields)
+    {
+        $this->createFields = $fields;
+    }
+
+    /**
+     * Set fillable fields on update
+     *
+     * @param array $fields Fillable fields on update
+     *
+     * @return void
+     */
+    public function setUpdateFields(array $fields)
+    {
+        $this->updateFields = $fields;
     }
 
     /**
@@ -31,9 +70,9 @@ class EloquentRepository implements RepositoryInterface
      *
      * @return array Valid params array
      */
-    public function getValidParams($params)
+    public function getValidParams($params, $fieldsList = false)
     {
-        $fields = $this->model->getFillable();
+        $fields = (!$fieldsList) ? $this->model->getFillable() : $fieldsList;
 
         $callback = function ($key) use ($fields) {
             return (array_search($key, $fields) !== false);
@@ -51,7 +90,7 @@ class EloquentRepository implements RepositoryInterface
      */
     public function create($params)
     {
-        $params = $this->getValidParams($params);
+        $params = $this->getValidParams($params, $this->createFields);
 
         return $this->model->create($params);
     }
@@ -79,7 +118,7 @@ class EloquentRepository implements RepositoryInterface
      */
     public function update($params, $data)
     {
-        $data = $this->getValidParams($data);
+        $data = $this->getValidParams($data, $this->updateFields);
 
         $query = $this->parseParams($params);
 
