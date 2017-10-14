@@ -1,17 +1,19 @@
 <?php
 
-namespace Protosofia\Rempathy\Contracts;
+namespace Protosofia\Rempathy\Repositories;
 
 use App;
 use Protosofia\Rempathy\Contracts\RepositoryInterface;
 use Protosofia\Rempathy\Contracts\RepositoryFactoryInterface;
 
-abstract RepositoryFactoryAbstract implements RepositoryFactoryInterface
+class EloquentRepositoryFactory implements RepositoryFactoryInterface
 {
     /**
      * @var  array  $repositories  Repositories namespace
      */
-    protected $repositories;
+    protected static $repositories = [
+        // 'Model' => 'Eloquent\Model\Namespace',
+    ];
 
     /**
      * Build a new repository instance
@@ -20,9 +22,13 @@ abstract RepositoryFactoryAbstract implements RepositoryFactoryInterface
      */
     public static function build(string $name) : RepositoryInterface
     {
-        $namespace = (isset($this->repositories[$name])) 
-                     ? $this->repositories[$name]
-                     : throw new \Exception('No repository defined for this model name.');
+        $namespace = (isset(self::$repositories[$name])) 
+                     ? self::$repositories[$name]
+                     : false;
+
+        if (!$namespace) {
+            throw new \Exception('Repository not defined.');
+        }
 
         return App::make($namespace);
     }
