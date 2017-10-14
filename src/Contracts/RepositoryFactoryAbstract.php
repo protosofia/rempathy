@@ -20,18 +20,10 @@ abstract RepositoryFactoryAbstract implements RepositoryFactoryInterface
      */
     public static function build(string $name) : RepositoryInterface
     {
-        return App::make($this->getRepositoryNamespace($name));
-    }
+        $namespace = (isset($this->repositories[$name])) 
+                     ? $this->repositories[$name]
+                     : throw new \Exception('No repository defined for this model name.');
 
-    /**
-     * Return the repository namespace
-     * @param   string  $name  Model name
-     * @return  string  Repository namespace
-     */
-    protected function getRepositoryNamespace(string $name) : string
-    {
-        return  (isset($this->repositories[$name])) 
-                ? $this->repositories[$name]
-                : throw new \Exception('No repository defined for this model name.');
+        return App::make($namespace);
     }
 }
