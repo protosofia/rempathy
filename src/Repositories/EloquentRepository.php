@@ -2,13 +2,13 @@
 
 namespace Protosofia\Rempathy\Repositories;
 
-use Protosofia\Rempathy\Contracts\ModelInterface;
+use Illuminate\Database\Eloquent\Model;
 use Protosofia\Rempathy\Contracts\RepositoryInterface;
 
 class EloquentRepository implements RepositoryInterface
 {
     /**
-     * @var ModelInterface $model Model instance
+     * @var Model $model Model instance
      */
     protected $model;
 
@@ -25,12 +25,12 @@ class EloquentRepository implements RepositoryInterface
     /**
      * Create a new instance of NetworkCrudService
      *
-     * @param ModelInterface $model Model instance
+     * @param Model $model Model instance
      *
      * @return void
      */
     public function __construct(
-        ModelInterface $model,
+        Model $model,
         $createFields = false,
         $updateFields = false
     ) {
@@ -86,7 +86,7 @@ class EloquentRepository implements RepositoryInterface
      *
      * @param array $params Record data
      *
-     * @return ModelInterface | boolean Stored record or false
+     * @return Model | boolean Stored record or false
      */
     public function create($params)
     {
