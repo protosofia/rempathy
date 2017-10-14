@@ -2,6 +2,8 @@
 
 namespace Protosofia\Rempathy\Contracts;
 
+use Protosofia\Rempathy\Contracts\RepositoryInterface;
+
 interface RepositoryFactoryInterface
 {
     /**
@@ -9,5 +11,5 @@ interface RepositoryFactoryInterface
      * @param   string  $name  Model name
      * @return  object
      */
-    public static function build(string $name) : object;
+    public static function build(string $name) : RepositoryInterface;
 }

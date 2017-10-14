@@ -3,6 +3,7 @@
 namespace Protosofia\Rempathy\Contracts;
 
 use App;
+use Protosofia\Rempathy\Contracts\RepositoryInterface;
 use Protosofia\Rempathy\Contracts\RepositoryFactoryInterface;
 
 abstract RepositoryFactoryAbstract implements RepositoryFactoryInterface
@@ -17,7 +18,7 @@ abstract RepositoryFactoryAbstract implements RepositoryFactoryInterface
      * @param   string  $name  Model name
      * @return  object
      */
-    public static function build(string $name) : object
+    public static function build(string $name) : RepositoryInterface
     {
         return App::make($this->getRepositoryNamespace($name));
     }
