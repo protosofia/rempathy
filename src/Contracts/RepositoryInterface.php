@@ -6,6 +6,8 @@ interface RepositoryInterface
 {
     public function create($params);
 
+    public function make($params);
+
     public function retrieve($params);
 
     public function update($params, $data);

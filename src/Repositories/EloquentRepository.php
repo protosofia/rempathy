@@ -96,6 +96,20 @@ class EloquentRepository implements RepositoryInterface
     }
 
     /**
+     * Make a new record
+     *
+     * @param array $params Record data
+     *
+     * @return Model
+     */
+    public function make($params)
+    {
+        $params = $this->getValidParams($params, $this->createFields);
+
+        return $this->model->make($params);
+    }
+
+    /**
      * Retrieve records
      *
      * @param array $params Record data for filter purposes
