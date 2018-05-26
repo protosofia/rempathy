@@ -174,9 +174,9 @@ class EloquentRepository implements RepositoryInterface
      *
      * @return Model
      */
-    protected function parseParams(array $params)
+    protected function parseParams(array $params, string $source = '')
     {
-        $query = $this->model;
+        $query = (strlen($source) > 0) ? $this->model->$source() : $this->model;
 
         if (empty($params)) return $query;
 
