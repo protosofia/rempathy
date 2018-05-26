@@ -4,6 +4,7 @@ namespace Protosofia\Rempathy\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use Protosofia\Rempathy\Contracts\RepositoryInterface;
+use Protosofia\Rempathy\Services\EloquentRepositoryQueryResolver;
 
 class EloquentRepository implements RepositoryInterface
 {
@@ -16,11 +17,16 @@ class EloquentRepository implements RepositoryInterface
      * @var array $createFields Fillable fields on create
      */
     protected $createFields;
-
+    
     /**
      * @var array $updateFields Fillable fields on update
      */
     protected $updateFields;
+
+    /**
+     * @var EloquentRepositoryQueryResolver $queryResolver EloquentRepositoryQueryResolver instance
+     */
+    protected $queryResolver;
 
     /**
      * Create a new instance of NetworkCrudService
@@ -37,6 +43,7 @@ class EloquentRepository implements RepositoryInterface
         $this->model = $model;
         $this->createFields = $createFields;
         $this->updateFields = $updateFields;
+        $this->queryResolver = new EloquentRepositoryQueryResolver();
     }
 
     /**
@@ -116,9 +123,9 @@ class EloquentRepository implements RepositoryInterface
      *
      * @return Collection | boolean Record collection or false
      */
-    public function retrieve($params = [], $source = '')
+    public function retrieve($params = [])
     {
-        $query = $this->parseParams($params);
+        $query = $this->queryResolver->parseParams($this->model, $params);
 
         return $query->get();
     }
@@ -130,11 +137,11 @@ class EloquentRepository implements RepositoryInterface
      *
      * @return integer How many records was updated
      */
-    public function update($params, $data, $source = '')
+    public function update($params, $data)
     {
         $data = $this->getValidParams($data, $this->updateFields);
 
-        $query = $this->parseParams($params);
+        $query = $this->queryResolver->parseParams($this->model, $params);
 
         return $query->update($data);
     }
@@ -146,9 +153,9 @@ class EloquentRepository implements RepositoryInterface
      *
      * @return integer How many records was deleted
      */
-    public function delete($params, $source = '')
+    public function delete($params)
     {
-        $query = $this->parseParams($params);
+        $query = $this->queryResolver->parseParams($this->model, $params);
 
         return $query->delete();
     }
@@ -160,9 +167,9 @@ class EloquentRepository implements RepositoryInterface
      *
      * @return Model | boolean Record or false
      */
-    public function find($params = [], $source = '')
+    public function find($params = [])
     {
-        $query = $this->parseParams($params);
+        $query = $this->queryResolver->parseParams($this->model, $params);
 
         return $query->first();
     }
@@ -174,41 +181,41 @@ class EloquentRepository implements RepositoryInterface
      *
      * @return Model
      */
-    protected function parseParams(array $params, string $source = '')
-    {
-        $query = (strlen($source) > 0) ? $this->model->$source() : $this->model;
+    // protected function parseParams(array $params, string $source = '')
+    // {
+    //     $query = (strlen($source) > 0) ? $this->model->$source() : $this->model;
 
-        if (empty($params)) return $query;
+    //     if (empty($params)) return $query;
 
-        if (!is_array(reset($params))) $params = [$params];
+    //     if (!is_array(reset($params))) $params = [$params];
 
-        $clauses = [
-            'where' => 'where',
-            'or' => 'orWhere',
-            'between' => 'whereBetween',
-            'not between' => 'whereNotBetween',
-            'in' => 'whereIn',
-            'not in' => 'whereNotIn',
-            'null' => 'whereNull',
-            'not null' => 'whereNotNull',
-            'collumn' => 'whereColumn'
-        ];
+    //     $clauses = [
+    //         'where' => 'where',
+    //         'or' => 'orWhere',
+    //         'between' => 'whereBetween',
+    //         'not between' => 'whereNotBetween',
+    //         'in' => 'whereIn',
+    //         'not in' => 'whereNotIn',
+    //         'null' => 'whereNull',
+    //         'not null' => 'whereNotNull',
+    //         'collumn' => 'whereColumn'
+    //     ];
 
-        foreach ($params as $param) {
-            if (empty($param)) continue;
+    //     foreach ($params as $param) {
+    //         if (empty($param)) continue;
 
-            try {
-                $clause = $clauses[$param[0]];
-                $args = array_slice($param, 1);
-            } catch (\Exception $e) {
-                continue;
-            }
+    //         try {
+    //             $clause = $clauses[$param[0]];
+    //             $args = array_slice($param, 1);
+    //         } catch (\Exception $e) {
+    //             continue;
+    //         }
 
-            $func = array($query, $clause);
+    //         $func = array($query, $clause);
 
-            $query = call_user_func_array($func, $args);
-        }
+    //         $query = call_user_func_array($func, $args);
+    //     }
 
-        return $query;
-    }
+    //     return $query;
+    // }
 }
