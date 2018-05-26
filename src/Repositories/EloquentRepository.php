@@ -116,7 +116,7 @@ class EloquentRepository implements RepositoryInterface
      *
      * @return Collection | boolean Record collection or false
      */
-    public function retrieve($params = [])
+    public function retrieve($params = [], $source = '')
     {
         $query = $this->parseParams($params);
 
@@ -130,7 +130,7 @@ class EloquentRepository implements RepositoryInterface
      *
      * @return integer How many records was updated
      */
-    public function update($params, $data)
+    public function update($params, $data, $source = '')
     {
         $data = $this->getValidParams($data, $this->updateFields);
 
@@ -146,7 +146,7 @@ class EloquentRepository implements RepositoryInterface
      *
      * @return integer How many records was deleted
      */
-    public function delete($params)
+    public function delete($params, $source = '')
     {
         $query = $this->parseParams($params);
 
@@ -160,7 +160,7 @@ class EloquentRepository implements RepositoryInterface
      *
      * @return Model | boolean Record or false
      */
-    public function find($params = [])
+    public function find($params = [], $source = '')
     {
         $query = $this->parseParams($params);
 
