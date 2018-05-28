@@ -4,7 +4,7 @@ namespace Protosofia\Rempathy\Services;
 
 use Protosofia\Rempathy\Contracts\RepositoryQueryResolver as RepositoryQueryResolverInterface;
 
-class EloquentRespositoryQueryResolver implements RepositoryQueryResolverInterface
+class EloquentRepositoryQueryResolver implements RepositoryQueryResolverInterface
 {
     /**
      * Build a query based on params
