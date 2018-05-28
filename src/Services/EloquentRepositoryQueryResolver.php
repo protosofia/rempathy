@@ -2,7 +2,7 @@
 
 namespace Protosofia\Rempathy\Services;
 
-use Protosofia\Rempathy\Contracts\RepositoryQueryResolverInterface;
+use Protosofia\Rempathy\Contracts\RepositoryQueryResolver as RepositoryQueryResolverInterface;
 
 class EloquentRespositoryQueryResolver implements RepositoryQueryResolverInterface
 {
