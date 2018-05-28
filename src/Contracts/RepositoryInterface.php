@@ -8,11 +8,11 @@ interface RepositoryInterface
 
     public function make($params);
 
-    public function retrieve($params, $source);
+    public function retrieve($params);
 
-    public function update($params, $data, $source);
+    public function update($params, $data);
 
-    public function delete($params, $source);
+    public function delete($params);
 
-    public function find($params, $source);
+    public function find($params);
 }
