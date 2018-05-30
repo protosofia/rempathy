@@ -17,7 +17,7 @@ class EloquentRepository implements RepositoryInterface
      * @var array $createFields Fillable fields on create
      */
     protected $createFields;
-    
+
     /**
      * @var array $updateFields Fillable fields on update
      */
@@ -43,7 +43,6 @@ class EloquentRepository implements RepositoryInterface
         $this->model = $model;
         $this->createFields = $createFields;
         $this->updateFields = $updateFields;
-        $this->queryResolver = new EloquentRepositoryQueryResolver();
     }
 
     /**
@@ -125,7 +124,9 @@ class EloquentRepository implements RepositoryInterface
      */
     public function retrieve($params = [])
     {
-        $query = $this->queryResolver->parseParams($this->model, $params);
+        $queryResolver = new EloquentRepositoryQueryResolver();
+
+        $query = $queryResolver->parseParams($this->model, $params);
 
         return $query->get();
     }
@@ -141,7 +142,9 @@ class EloquentRepository implements RepositoryInterface
     {
         $data = $this->getValidParams($data, $this->updateFields);
 
-        $query = $this->queryResolver->parseParams($this->model, $params);
+        $queryResolver = new EloquentRepositoryQueryResolver();
+
+        $query = $queryResolver->parseParams($this->model, $params);
 
         return $query->update($data);
     }
@@ -155,7 +158,9 @@ class EloquentRepository implements RepositoryInterface
      */
     public function delete($params)
     {
-        $query = $this->queryResolver->parseParams($this->model, $params);
+        $queryResolver = new EloquentRepositoryQueryResolver();
+
+        $query = $queryResolver->parseParams($this->model, $params);
 
         return $query->delete();
     }
@@ -169,53 +174,10 @@ class EloquentRepository implements RepositoryInterface
      */
     public function find($params = [])
     {
-        $query = $this->queryResolver->parseParams($this->model, $params);
+        $queryResolver = new EloquentRepositoryQueryResolver();
+
+        $query = $queryResolver->parseParams($this->model, $params);
 
         return $query->first();
     }
-
-    /**
-     * Build a query based on params
-     *
-     * @param array $params Conditions of the query
-     *
-     * @return Model
-     */
-    // protected function parseParams(array $params, string $source = '')
-    // {
-    //     $query = (strlen($source) > 0) ? $this->model->$source() : $this->model;
-
-    //     if (empty($params)) return $query;
-
-    //     if (!is_array(reset($params))) $params = [$params];
-
-    //     $clauses = [
-    //         'where' => 'where',
-    //         'or' => 'orWhere',
-    //         'between' => 'whereBetween',
-    //         'not between' => 'whereNotBetween',
-    //         'in' => 'whereIn',
-    //         'not in' => 'whereNotIn',
-    //         'null' => 'whereNull',
-    //         'not null' => 'whereNotNull',
-    //         'collumn' => 'whereColumn'
-    //     ];
-
-    //     foreach ($params as $param) {
-    //         if (empty($param)) continue;
-
-    //         try {
-    //             $clause = $clauses[$param[0]];
-    //             $args = array_slice($param, 1);
-    //         } catch (\Exception $e) {
-    //             continue;
-    //         }
-
-    //         $func = array($query, $clause);
-
-    //         $query = call_user_func_array($func, $args);
-    //     }
-
-    //     return $query;
-    // }
 }
